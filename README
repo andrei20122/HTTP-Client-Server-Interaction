@@ -1,0 +1,60 @@
+LEAHU MORIE ROBERT ANDREI 321 CB
+TEMA 3 PCOM
+
+-am folosit scheletul de cod din laboratorul 10 rezolvat , doar ca l-am mai modificat
+putin , deoarece am facut tema in C++
+-am facut un buffer pentru comenzi 
+-am modificat din lab functiile de compute_get si compute_post din request
+-fucntiile au fost modificate intrucat ele nu luau in considerare nevoie de a adauga in body-ul request-ului un token de acces. 
+- tokenul trebuie pus inainte de continutul mesajului, adaugarea lui (la folosirea functiei)  
+ar fi mult mai greu  de facut decat simpla adaugare a unui parametru, de aceea am si modificat functiile
+
+- la comanda --register-- trebuie sa intorc un username si o parola, si astfel eu mi-am citit 2 variabile care
+vor fi adaugate in  json(in variabila mea data_body) si voi trimite catre server un request de tip POST
+-dupa acest request serverul imi va trimite cum arata userul-parola in format json, iar daca am primit un mesaj de eroare tratez eroarea
+afisand mesaje respective pentru tipul de eroare.
+
+->pentru fiecare comanda deschid si inchid conexiunea la socket
+
+-la comanda --login--  ma-am folosit de o variabila de tip bool pentru a verificat daca raman logat
+-la aceasta comanda fac cam acelasi lucru  ca la register, doar in plus mai este si cookie-ul
+-afisez un mesaj de eroare daca datele de la username si password sunt gresite 
+-daca nu sunt gresite ma loghez si iau si cookie ul in considerare
+
+-la --enter_library--  pentru a intra in biblioteca unui user, acesta trebuie sa fie logat si pentru asta verific 
+la inceput cu un mesaj de eroare daca check_log nu este efectuat => nu pot intra in biblioteca. 
+-ma folosesc de cookie-ul de la login pentru a construi requestul catre server de tip GET, iar de la server voi primi token-ul pe care
+il retin intr-o variabila si dau un mesaj ca token ul s-a trimis
+-token ul l-am salvat intr un vector de caractere jwt_token si mi am mai luat o variabila 
+pt verificarea primirii token ului care o fac 1 cand l-am trimis
+
+-la --get_books-- mai intai verific, daca am access sau sunt intrat in libraria buna dupa care trimit la server un mesaj de tip GET
+iar in raspunsul acestuia voi avea practic cartile respective.
+-pentru  trimiterea tokenul către server, l-am adaugat   în headerul Authorization asa cum cere si in enunt.
+-bineinteles am prefixat valoarea token ului de cuvântul Bearer.
+
+-la --get_book-- afisez o carte specifica in functie de id-ul unic oferit noua de catre server
+-daca cartea cu id ul respectiv nu a fost gasita se afiseaza mesajul "No book was found!", acest mesaj fiind unul de la server
+pe care l-am lasat asa ca sa mi ateste ca, cartea cu id ul respectiv nu mai exista si ca stergerea s-a facut cu succes
+
+-la --add_book-- imi formez un obiect json in care adaug toate topic-urile in formarea unei carti si efectuez un request
+de tip POST catre server
+-in raspunsul acestuia mi se va arata cartea cu toate topic-urile respective, daca nu a functionat imi transmit mesaje de eroare
+-ca sa citesc mai multe caractere si cu spatii m-am folosit de getline
+-page_count l-am facut string si am luat o fc care imi verifica daca un string este nr sau nu 
+-daca page_count nu este nr inseamna ca datele au fost introduse gresit
+-daca cartea a fost adaugata cu succes afisez un mesaj pentru asta 
+
+-la --delete_book-- am folosit o functie de copute_delete care de fapt este leit compute_get_request
+doar ca am inlocuit GET cu DELETE, adica imi face un request pentru server de tip DELETE
+- din raspunsul serverului ,dupa ce am facut get_books cartea cu id-ul respectiv  nu mai apare
+in database-ul bibliotecii dupa ce dau delete.
+-si ca la celelalte comenzi afisez mesaje de eroare 
+-iar dupa ce am sters cartea mi-am afisat un mesaj sa fiu sigur ca, cartea a fost stearsa
+
+-la --logout-- fac cam acelasi lucru ca la comanda login
+- trimit un request de tip get catre server trimitand si cookie-ul pentru a arata ca sunt autentificat
+-actualizez variabilele mele de verificare
+-si afisez mesaj pt a fi sigur ca m-am deconectat
+
+-la --exit-- dau break si efectiv opresc programul 
